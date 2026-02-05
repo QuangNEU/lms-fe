@@ -1,20 +1,14 @@
 import Header from "../components/Header"
-import Recents from "./Recents"
-import Events from "./Events"
-import Schedules from "./Schedules"
 import Footer from "../components/Footer"
-function HomeLayout({ children }) {
+function DefaultLayout({ children }) {
     return (
         <div className="wrapper">
             <Header />
             <div className="container">
-                <Recents />
                 {children}
-                <Events />
-                <Schedules />
             </div>
             <Footer />
         </div>
     )
 }
-export default HomeLayout
+export default DefaultLayout;
