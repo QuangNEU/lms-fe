@@ -1,9 +1,8 @@
 import { faCircleXmark, faSpinner, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import HeadlessTippy from '@tippyjs/react/headless';
-import { Wrapper as PopperWrapper } from '../../../Popper/Wrapper';
+import { Wrapper as PopperWrapper } from "../../../Popper/index"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { AccountItem } from '../../../AccountItems';
 import { useEffect, useState, useRef } from 'react';
 import styles from './Search.module.scss';
 
@@ -28,7 +27,7 @@ function Search() {
                 setLoading(false);
             })
             .catch(() => {
-                setLoading(true);
+                setLoading(false);
             })
     }, [searchValue])
 
@@ -60,7 +59,7 @@ function Search() {
                 <input
                     ref={inputRef}
                     value={searchValue}
-                    placeholder='Search account and video'
+                    placeholder='Search your course'
                     spellCheck={false}
                     onChange={(e) => setSearchValue(e.target.value)}
                     onFocus={() => setShowSeacrhResult(true)}
