@@ -1,4 +1,12 @@
+import classNames from "classnames/bind"
+import styles from "./Events.module.scss"
+
+const cx = classNames.bind(styles)
 function Events() {
-    return <h2>Events</h2>
+    return (
+        <div className={classNames('wrapper')}>
+            Events
+        </div>
+    )
 }
 export default Events

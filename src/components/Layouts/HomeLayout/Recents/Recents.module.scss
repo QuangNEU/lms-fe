@@ -1,0 +1,21 @@
+.box {
+    background: var(--white);
+    padding: 0 20px 20px 20px;
+    margin-top: 16px;
+}
+
+.recentCourse {
+    display: flex;
+}
+
+.wrapper {
+    border: solid 1px var(--course-border)
+}
+
+h3 {
+    padding: 20px;
+    border-bottom: 1px solid var(--course-border);
+    color: #c02424;
+    font-weight: 400;
+    background: #fafafa;
+}

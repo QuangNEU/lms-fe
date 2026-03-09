@@ -1,0 +1,24 @@
+.wrapper {
+    background: var(--bg-footer);
+    flex: 1 0 auto
+}
+
+.container {
+    min-height: 600px;
+    padding: 30px 100px;
+    display: flex;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 600px;
+    width: 70%;
+}
+
+.side-content {
+    display: block;
+    min-height: 600px;
+    width: 30%;
+    float: right;
+}
