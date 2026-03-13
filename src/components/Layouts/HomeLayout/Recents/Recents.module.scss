@@ -6,16 +6,24 @@
 
 .recentCourse {
     display: flex;
+    background: var(--white);
+    justify-content: center;
+}
+
+.action {
+    display: flex;
+    justify-content: end;
 }
 
 .wrapper {
-    border: solid 1px var(--course-border)
-}
+    border: solid 1px var(--course-border);
+    background: var(--white);
 
-h3 {
-    padding: 20px;
-    border-bottom: 1px solid var(--course-border);
-    color: #c02424;
-    font-weight: 400;
-    background: #fafafa;
+    h3 {
+        padding: 20px;
+        border-bottom: 1px solid var(--course-border);
+        color: #c02424;
+        font-weight: 400;
+        background: #efefef;
+    }
 }

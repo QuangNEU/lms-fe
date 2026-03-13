@@ -1,6 +1,6 @@
 .wrapper {
     background: var(--bg-footer);
-    flex: 1 0 auto
+    flex: 1 0 auto;
 }
 
 .container {
@@ -14,6 +14,7 @@
     flex-direction: column;
     min-height: 600px;
     width: 70%;
+    margin-right: 10px;
 }
 
 .side-content {
@@ -21,4 +22,5 @@
     min-height: 600px;
     width: 30%;
     float: right;
+    margin-left: 10px;
 }
