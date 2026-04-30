@@ -1,49 +1,39 @@
-import { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { privateRoutes, publicRoutes } from './routes'
-import HomeLayout from './components/Layouts/HomeLayout'
-
+import Layout from './components/Layout';
+import ProtectedRoute from './components/ProtectedRoute';
 function App() {
 
   return (
     <>
       <Routes>
+        <Route path="/" element={<Layout />}>
+          {privateRoutes.map((route, index) => {
+            const Page = route.component;
+            return (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <ProtectedRoute>
+                    <Page />
+                  </ProtectedRoute>
+                }
+              />
+            )
+          })}
+        </Route>
         {publicRoutes.map((route, index) => {
           const Page = route.component;
-          const Layout = route.layout;
           return (
             <Route
               key={index}
               path={route.path}
               element={
-                <Layout>
-                  <Page />
-                </Layout>
+                <Page />
               }
             />
           );
-        })}
-
-        {privateRoutes.map((route, index) => {
-          const Page = route.component;
-          let Layout = HomeLayout;
-          if (route.layout) {
-            Layout = route.layout;
-          }
-          else if (route.layout == null) {
-            Layout = Fragment;
-          }
-          return (
-            <Route
-              key={index}
-              path={route.path}
-              element={
-                <Layout >
-                  <Page />
-                </Layout>
-              }
-            />
-          )
         })}
       </Routes>
     </>
