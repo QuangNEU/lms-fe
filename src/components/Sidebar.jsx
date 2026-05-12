@@ -5,7 +5,6 @@ export default function Sidebar() {
         { to: '/', icon: 'dashboard', label: 'Dashboard' },
         { to: '/courses/1', icon: 'school', label: 'My Courses' },
         { to: '/schedule', icon: 'calendar_today', label: 'Schedule' },
-        { to: '/resources', icon: 'folder_open', label: 'Resources' },
         { to: '/ai-assistant', icon: 'smart_toy', label: 'AI Assistant' },
         { to: '/settings', icon: 'settings', label: 'Settings' },
     ];

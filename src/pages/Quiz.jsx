@@ -91,7 +91,7 @@ export default function Quiz() {
     const submitToServer = async () => {
         setIsSubmitting(true);
         try {
-            const res = await fetchAPI(`http://localhost:5000/quiz/${id}/submit`, {
+            const res = await fetchAPI(`http://localhost:5000/quizzes/${id}/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ answers })
