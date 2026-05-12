@@ -36,8 +36,8 @@ export default function AIAssistantContent() {
             try {
                 // CHẠY SONG SONG 2 API CÙNG LÚC
                 const [historyRes, sourcesRes] = await Promise.all([
-                    fetch(`http://localhost:5000/ai/history/${sessionId}`, { headers: getAuthHeaders() }),
-                    fetch(`http://localhost:5000/materials/lesson/${sessionId}`, { headers: getAuthHeaders() })
+                    fetch(`${import.meta.env.VITE_API_URL}/ai/history/${sessionId}`, { headers: getAuthHeaders() }),
+                    fetch(`${import.meta.env.VITE_API_URL}/materials/lesson/${sessionId}`, { headers: getAuthHeaders() })
                 ]);
 
                 // CHUYỂN JSON SONG SONG
@@ -85,7 +85,7 @@ export default function AIAssistantContent() {
         formData.append('sessionId', sessionId); // Dùng sessionId thay cho lessonId trong kiến trúc mới
 
         try {
-            const response = await fetch('http://localhost:5000/materials/upload', {
+            const response = await fetch('${import.meta.env.VITE_API_URL}/materials/upload', {
                 method: 'POST',
                 headers: getAuthHeaders(), // KHÔNG set Content-Type, trình duyệt tự xử lý cho FormData
                 body: formData,
@@ -125,7 +125,7 @@ export default function AIAssistantContent() {
             // Lấy danh sách ID của các tài liệu đang được CHỌN (checkbox)
             const activeMaterialIds = sources.filter(s => s.active).map(s => s.id);
 
-            const response = await fetch('http://localhost:5000/ai/chat', {
+            const response = await fetch('${import.meta.env.VITE_API_URL}/ai/chat', {
                 method: 'POST',
                 headers: {
                     ...getAuthHeaders(),
@@ -169,7 +169,7 @@ export default function AIAssistantContent() {
         if (!window.confirm("Bạn có chắc chắn muốn xóa tài liệu này không?")) return;
 
         try {
-            const response = await fetch(`http://localhost:5000/materials/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/materials/${id}`, {
                 method: 'DELETE',
                 headers: getAuthHeaders()
             });

@@ -28,7 +28,7 @@ export default function Schedule() {
     useEffect(() => {
         const loadScheduleData = async () => {
             try {
-                const response = await fetchAPI('http://localhost:5000/schedule', {
+                const response = await fetchAPI('${import.meta.env.VITE_API_URL}/schedule', {
                     method: 'GET'
                 });
 

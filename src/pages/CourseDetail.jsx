@@ -38,7 +38,7 @@ export default function CourseDetail() {
     useEffect(() => {
         const fetchCourseDetail = async () => {
             try {
-                const response = await fetchAPI(`http://localhost:5000/courses/${id}`, {
+                const response = await fetchAPI(`${import.meta.env.VITE_API_URL}/courses/${id}`, {
                     method: 'GET'
                 });
                 const result = await response.json();

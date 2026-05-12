@@ -20,8 +20,8 @@ export default function Settings() {
         const fetchUserProfile = async () => {
             try {
                 // Dùng fetchAPI của bạn, nhớ truyền đúng URL nhé 
-                // (Nếu đã có proxy thì dùng '/api/users/profile', chưa có thì ghi full URL http://localhost:5000/api...)
-                const response = await fetchAPI('http://localhost:5000/users/profile', {
+                // (Nếu đã có proxy thì dùng '/api/users/profile', chưa có thì ghi full URL ${import.meta.env.VITE_API_URL}/api...)
+                const response = await fetchAPI('${import.meta.env.VITE_API_URL}/users/profile', {
                     method: 'GET'
                 });
 
@@ -58,7 +58,7 @@ export default function Settings() {
 
         try {
             // Dùng fetchAPI, chỉ cần truyền URL, method và body. Token tự lo!
-            const response = await fetchAPI('http://localhost:5000/users/profile', {
+            const response = await fetchAPI('${import.meta.env.VITE_API_URL}/users/profile', {
                 method: 'PUT',
                 body: JSON.stringify({
                     firstName: firstName,
