@@ -16,12 +16,12 @@ export default function Grades() {
         const fetchGradeData = async () => {
             try {
                 // 1. Lấy tên khóa học
-                const courseRes = await fetchAPI(`http://localhost:5000/courses/${id}`, { method: 'GET' });
+                const courseRes = await fetchAPI(`${import.meta.env.VITE_API_URL}/courses/${id}`, { method: 'GET' });
                 const courseData = await courseRes.json();
                 if (courseData.success) setCourseInfo(courseData.data);
 
                 // 2. Lấy điểm của user hiện tại (Tạm thời mượn API members và lọc ra chính mình)
-                const membersRes = await fetchAPI(`http://localhost:5000/courses/${id}/members`, { method: 'GET' });
+                const membersRes = await fetchAPI(`${import.meta.env.VITE_API_URL}/courses/${id}/members`, { method: 'GET' });
                 const membersData = await membersRes.json();
 
                 if (membersData.success && user) {

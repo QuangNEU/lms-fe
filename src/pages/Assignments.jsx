@@ -19,11 +19,11 @@ export default function Assignments() {
         const fetchAssignments = async () => {
             setIsLoading(true);
             try {
-                const courseRes = await fetchAPI(`http://localhost:5000/courses/${id}`, { method: 'GET' });
+                const courseRes = await fetchAPI(`${import.meta.env.VITE_API_URL}/courses/${id}`, { method: 'GET' });
                 const courseData = await courseRes.json();
                 if (courseData.success) setCourseInfo(courseData.data);
 
-                const assignRes = await fetchAPI(`http://localhost:5000/courses/${id}/assignments`, { method: 'GET' });
+                const assignRes = await fetchAPI(`${import.meta.env.VITE_API_URL}/courses/${id}/assignments`, { method: 'GET' });
                 const assignData = await assignRes.json();
 
                 if (assignData.success) {

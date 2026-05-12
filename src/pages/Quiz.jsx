@@ -21,7 +21,7 @@ export default function Quiz() {
         const fetchQuizData = async () => {
             setIsLoading(true);
             try {
-                const res = await fetchAPI(`http://localhost:5000/quizzes/${id}/take`, { method: 'GET' });
+                const res = await fetchAPI(`${import.meta.env.VITE_API_URL}/quizzes/${id}/take`, { method: 'GET' });
                 const data = await res.json();
 
                 // 🛑 XỬ LÝ KHI BÁC BẢO VỆ CHẶN (Status 403 hoặc success = false)
@@ -91,7 +91,7 @@ export default function Quiz() {
     const submitToServer = async () => {
         setIsSubmitting(true);
         try {
-            const res = await fetchAPI(`http://localhost:5000/quizzes/${id}/submit`, {
+            const res = await fetchAPI(`${import.meta.env.VITE_API_URL}/quizzes/${id}/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ answers })

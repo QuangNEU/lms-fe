@@ -30,8 +30,8 @@ export default function CourseMembers() {
             try {
                 // Gọi song song 2 API cho nhanh
                 const [courseRes, membersRes] = await Promise.all([
-                    fetchAPI(`http://localhost:5000/courses/${id}`, { method: 'GET' }),
-                    fetchAPI(`http://localhost:5000/courses/${id}/members`, { method: 'GET' })
+                    fetchAPI(`${import.meta.env.VITE_API_URL}/courses/${id}`, { method: 'GET' }),
+                    fetchAPI(`${import.meta.env.VITE_API_URL}/courses/${id}/members`, { method: 'GET' })
                 ]);
 
                 const courseResult = await courseRes.json();
