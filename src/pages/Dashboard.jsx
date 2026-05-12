@@ -26,7 +26,7 @@ export default function Dashboard() {
     useEffect(() => {
         const fetchMyCourse = async () => {
             try {
-                const response = await fetchAPI('${import.meta.env.VITE_API_URL}/courses/mycourse', { method: 'GET' });
+                const response = await fetchAPI(`${import.meta.env.VITE_API_URL}/courses/mycourse`, { method: 'GET' });
                 const result = await response.json();
 
                 if (result.success || response.ok) {
@@ -52,7 +52,7 @@ export default function Dashboard() {
         const fetchSchedule = async () => {
             try {
                 // Nhớ đổi port nếu backend của bạn khác 5000
-                const response = await fetchAPI('${import.meta.env.VITE_API_URL}/schedule', { method: 'GET' });
+                const response = await fetchAPI(`${import.meta.env.VITE_API_URL}/schedule`, { method: 'GET' });
                 const result = await response.json();
 
                 if (result.success) {

@@ -85,7 +85,7 @@ export default function AIAssistantContent() {
         formData.append('sessionId', sessionId); // Dùng sessionId thay cho lessonId trong kiến trúc mới
 
         try {
-            const response = await fetch('${import.meta.env.VITE_API_URL}/materials/upload', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/materials/upload`, {
                 method: 'POST',
                 headers: getAuthHeaders(), // KHÔNG set Content-Type, trình duyệt tự xử lý cho FormData
                 body: formData,
@@ -125,7 +125,7 @@ export default function AIAssistantContent() {
             // Lấy danh sách ID của các tài liệu đang được CHỌN (checkbox)
             const activeMaterialIds = sources.filter(s => s.active).map(s => s.id);
 
-            const response = await fetch('${import.meta.env.VITE_API_URL}/ai/chat', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/ai/chat`, {
                 method: 'POST',
                 headers: {
                     ...getAuthHeaders(),

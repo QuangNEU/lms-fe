@@ -16,7 +16,7 @@ export default function AIAssistantDashboard() {
     useEffect(() => {
         const loadSessions = async () => {
             try {
-                const response = await fetchAPI('${import.meta.env.VITE_API_URL}/ai/sessions');
+                const response = await fetchAPI(`${import.meta.env.VITE_API_URL}/ai/sessions`);
                 const result = await response.json();
                 if (result.success) {
                     setNotebooks(result.data);
@@ -36,7 +36,7 @@ export default function AIAssistantDashboard() {
         if (!title) return;
 
         try {
-            const response = await fetchAPI('${import.meta.env.VITE_API_URL}/ai/session', {
+            const response = await fetchAPI(`${import.meta.env.VITE_API_URL}/ai/session`, {
                 method: 'POST',
                 body: JSON.stringify({ title })
             });
