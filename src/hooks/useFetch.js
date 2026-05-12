@@ -16,7 +16,7 @@ export const useFetch = () => {
         }
 
         try {
-            const response = fetch(url, { ...options, headers });
+            const response = await fetch(url, { ...options, headers });
 
             if (response.status == 401) {
                 console.warn('Token da het han');

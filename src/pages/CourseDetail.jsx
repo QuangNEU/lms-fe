@@ -17,37 +17,53 @@ export default function CourseDetail() {
         setOpenModuleId(prev => prev === moduleId ? null : moduleId);
     };
 
+    // 💡 HÀM MỚI: Xử lý mở PDF sang tab mới chuẩn style NEU
+    const handleOpenMaterial = (item) => {
+        if (item.type === 'quiz') {
+            // Logic cho bài thi (Có thể chuyển hướng sang trang thi sau)
+            alert("Đây là bài thi, tính năng đang phát triển!");
+            return;
+        }
+
+        // Logic cho bài giảng (PDF/Video)
+        if (!item.file_url) {
+            alert("Bài giảng này chưa có file đính kèm!");
+            return;
+        }
+
+        // Mở file PDF sang tab mới để kích hoạt trình đọc PDF mặc định của trình duyệt
+        window.open(item.file_url, '_blank', 'noopener,noreferrer');
+    };
+
     useEffect(() => {
         const fetchCourseDetail = async () => {
             try {
                 const response = await fetchAPI(`http://localhost:5000/courses/${id}`, {
                     method: 'GET'
-                })
-                const result = await response.json()
+                });
+                const result = await response.json();
                 if (response.ok) {
                     setCourse(result.data);
+                } else {
+                    setError('Mất kết nối tới máy chủ');
                 }
-                else {
-                    setError('Mat ket noi toi may chu')
-                }
-                console.log(result.data)
+                console.log(result.data);
 
-            }
-            catch (err) {
-                if (err.message != 'Unauthorized') {
-                    setError(err);
+            } catch (err) {
+                if (err.message !== 'Unauthorized') {
+                    setError(err.message || 'Có lỗi xảy ra');
                 }
-            }
-            finally {
+            } finally {
                 setIsLoading(false);
             }
-        }
-        fetchCourseDetail()
-    }, [id])
+        };
+        fetchCourseDetail();
+    }, [id]);
 
     if (isLoading) return <div className="p-8 text-center text-slate-500">Đang tải thông tin khóa học...</div>;
     if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
     if (!course) return <div className="p-8 text-center text-slate-500">Không tìm thấy khóa học!</div>;
+
     return (
         <div className="max-w-[1400px] mx-auto p-8 flex gap-8">
             {/* Center Content Area */}
@@ -135,7 +151,11 @@ export default function CourseDetail() {
                                     <div className="p-4 space-y-3 bg-slate-50">
                                         {module.items && module.items.length > 0 ? (
                                             module.items.map((item) => (
-                                                <div key={`${item.type}-${item.id}`} className="bg-white p-4 rounded-2xl flex items-center justify-between hover:shadow-md transition-shadow group cursor-pointer">
+                                                <div
+                                                    key={`${item.type}-${item.id}`}
+                                                    className="bg-white p-4 rounded-2xl flex items-center justify-between hover:shadow-md transition-shadow group cursor-pointer"
+                                                    onClick={() => handleOpenMaterial(item)} // 💡 GẮN SỰ KIỆN ONCLICK VÀO ĐÂY
+                                                >
                                                     <div className="flex items-center gap-4">
                                                         {/* Đổi Icon và Màu sắc dựa vào Type (Lesson hay Quiz) */}
                                                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${item.type === 'quiz' ? 'bg-orange-50 text-orange-600' : 'bg-blue-50 text-blue-600'}`}>
@@ -181,12 +201,12 @@ export default function CourseDetail() {
                     <h4 className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-6">Course Faculty</h4>
                     <div className="flex items-center gap-4 mb-4">
                         <img
-                            alt="Dr. Nguyen Van A"
+                            alt="Instructor Avatar"
                             className="w-16 h-16 rounded-2xl object-cover"
                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6conqNomp4odixE4ihvgDtKL9F1E-kV0-lv_JGeAs5GBpgfO7zcArgMoYNluqqIf7fGXEvv0EybNbcjFRG47pcMSBu3kad3vi2O7oQc2gWsiQW1R-nCnWNkAwG73x43mNAQFCOTpTfiGa83udwYMw0DDVg3_0rysGQzn_0vuX-UQDJKgOm6hzR9bzy2krsZ3YhLC9deTJlWHTjl9djAV9v6dABX9Wr6kcza-_c1Gb42-YZcbNJmvWnHkK3p8wP_LXEjno07jOIFo"
                         />
                         <div>
-                            <p className="font-bold text-lg text-primary">{course.teacher.full_name}</p>
+                            <p className="font-bold text-lg text-primary">{course.teacher?.full_name || 'Giảng viên'}</p>
                             <p className="text-xs text-on-surface-variant">Lead Instructor • Network Security Specialist</p>
                         </div>
                     </div>

@@ -1,4 +1,95 @@
+import { useState, useEffect } from 'react';
+// Nhớ import useFetch từ đúng đường dẫn của bạn nhé!
+import { useFetch } from '../hooks/useFetch';
+
 export default function Settings() {
+    // Gọi custom hook ra để dùng
+    const fetchAPI = useFetch();
+
+    // 1. Khởi tạo State
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [avatarUrl, setAvatarUrl] = useState('');
+
+    const [isFetching, setIsFetching] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
+
+    // 2. TỰ ĐỘNG LẤY DỮ LIỆU KHI MỞ TRANG
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                // Dùng fetchAPI của bạn, nhớ truyền đúng URL nhé 
+                // (Nếu đã có proxy thì dùng '/api/users/profile', chưa có thì ghi full URL http://localhost:5000/api...)
+                const response = await fetchAPI('http://localhost:5000/users/profile', {
+                    method: 'GET'
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.data) {
+                    const user = data.data;
+
+                    setEmail(user.email || '');
+                    setAvatarUrl(user.avatar_url || '');
+
+                    // Tách full_name từ DB thành First Name và Last Name
+                    if (user.full_name) {
+                        const nameParts = user.full_name.trim().split(' ');
+                        setFirstName(nameParts[0] || '');
+                        setLastName(nameParts.slice(1).join(' ') || '');
+                    }
+                }
+            } catch (error) {
+                console.error('Lỗi khi kéo dữ liệu hồ sơ:', error);
+            } finally {
+                setIsFetching(false);
+            }
+        };
+
+        fetchUserProfile();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // 3. HÀM XỬ LÝ LƯU DỮ LIỆU
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSaving(true);
+
+        try {
+            // Dùng fetchAPI, chỉ cần truyền URL, method và body. Token tự lo!
+            const response = await fetchAPI('http://localhost:5000/users/profile', {
+                method: 'PUT',
+                body: JSON.stringify({
+                    firstName: firstName,
+                    lastName: lastName,
+                    avatar_url: avatarUrl
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert('Cập nhật thông tin cá nhân thành công!');
+            } else {
+                alert('Cập nhật thất bại: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Lỗi khi gọi API:', error);
+            alert('Lỗi kết nối máy chủ hoặc Token hết hạn!');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    if (isFetching) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <p className="text-on-surface-variant font-medium">Đang tải dữ liệu hồ sơ...</p>
+            </div>
+        );
+    }
+
     return (
         <div className="max-w-4xl mx-auto px-8 py-8">
             <div className="mb-8">
@@ -14,19 +105,22 @@ export default function Settings() {
                     <button className="px-6 py-4 text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors">Security</button>
                 </div>
 
-                <div className="p-8 space-y-8">
-                    {/* Profile Section */}
+                <form onSubmit={handleSubmit} className="p-8 space-y-8">
                     <section>
                         <h3 className="text-lg font-bold text-on-surface mb-4">Personal Information</h3>
                         <div className="flex items-center gap-6 mb-6">
                             <div className="relative">
-                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrQWD2Z9cFbJNbTGyjxQFJ5JzuDZ9y7XPK6bnxuhbt1RcDxj598NrXAFJsSYqsZ4_m44fRZrJxOjrdciDa-yxPf4R37EZrSdMPFT7YyDOkOck8hxwkv9pDIHZXc4DCkAy6gqa25xNrfGs6HRPNB9OI88ilYtuR9-WzJnHEERPwbB1hfciXNYAtVrIfCpdlG1ycuQU58XGwnYBA7qkF-p_FFSx-CKQFNlAwas41lcPUkkj6BwlkAoFUe8V2aeeSsa-8Zi3zKMf0jLw" alt="Profile" className="w-24 h-24 rounded-full object-cover border-4 border-surface" />
-                                <button className="absolute bottom-0 right-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center shadow-md hover:scale-105 transition-transform">
+                                <img
+                                    src={avatarUrl || 'https://via.placeholder.com/150'}
+                                    alt="Profile"
+                                    className="w-24 h-24 rounded-full object-cover border-4 border-surface"
+                                />
+                                <button type="button" className="absolute bottom-0 right-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center shadow-md hover:scale-105 transition-transform">
                                     <span className="material-symbols-outlined text-[16px]">edit</span>
                                 </button>
                             </div>
                             <div>
-                                <button className="px-4 py-2 bg-surface-container rounded-lg text-sm font-semibold text-on-surface hover:bg-surface-container-high transition-colors">Upload New Picture</button>
+                                <button type="button" className="px-4 py-2 bg-surface-container rounded-lg text-sm font-semibold text-on-surface hover:bg-surface-container-high transition-colors">Upload New Picture</button>
                                 <p className="text-xs text-on-surface-variant mt-2">JPG, GIF or PNG. Max size of 800K</p>
                             </div>
                         </div>
@@ -34,19 +128,30 @@ export default function Settings() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">First Name</label>
-                                <input type="text" defaultValue="Jonathan" className="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/20" />
+                                <input
+                                    type="text"
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    className="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/20"
+                                />
                             </div>
                             <div>
                                 <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Last Name</label>
-                                <input type="text" defaultValue="Vance" className="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/20" />
+                                <input
+                                    type="text"
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    className="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/20"
+                                />
                             </div>
                             <div className="md:col-span-2">
                                 <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Email Address</label>
-                                <input type="email" defaultValue="j.vance@atheneum.edu" className="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/20" />
-                            </div>
-                            <div className="md:col-span-2">
-                                <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Bio</label>
-                                <textarea rows={4} defaultValue="Computer Science student focusing on network architecture and distributed systems." className="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/20 resize-none"></textarea>
+                                <input
+                                    type="email"
+                                    value={email}
+                                    disabled
+                                    className="w-full px-4 py-3 bg-slate-100 border-none rounded-xl text-sm text-slate-500 cursor-not-allowed"
+                                />
                             </div>
                         </div>
                     </section>
@@ -54,10 +159,16 @@ export default function Settings() {
                     <hr className="border-slate-100" />
 
                     <div className="flex justify-end gap-4">
-                        <button className="px-6 py-2.5 rounded-xl text-sm font-bold text-on-surface-variant hover:bg-surface-container transition-colors">Cancel</button>
-                        <button className="px-6 py-2.5 rounded-xl text-sm font-bold bg-primary text-white shadow-md hover:opacity-90 transition-opacity">Save Changes</button>
+                        <button type="button" className="px-6 py-2.5 rounded-xl text-sm font-bold text-on-surface-variant hover:bg-surface-container transition-colors">Cancel</button>
+                        <button
+                            type="submit"
+                            disabled={isSaving}
+                            className={`px-6 py-2.5 rounded-xl text-sm font-bold bg-primary text-white shadow-md transition-opacity ${isSaving ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'}`}
+                        >
+                            {isSaving ? 'Saving...' : 'Save Changes'}
+                        </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     );
