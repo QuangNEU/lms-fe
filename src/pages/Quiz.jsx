@@ -7,7 +7,7 @@ export default function Quiz() {
     const navigate = useNavigate();
     const fetchAPI = useFetch();
 
-    // --- THAY THẾ MOCK DATA BẰNG STATES ---
+    // --- THAY THẾ MOCK DATA BẰNG STATES --- 
     const [quizInfo, setQuizInfo] = useState(null);
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
